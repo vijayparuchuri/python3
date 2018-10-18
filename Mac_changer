@@ -1,0 +1,54 @@
+#!/usr/bin/evn python
+import subprocess
+import optparse
+import re
+
+
+def arguments():
+    parse = optparse.OptionParser()
+    parse.add_option("-i", "--interface", dest='n', help="Enter the interface")
+    parse.add_option("-m", '--new_mac', dest='s', help='Enter the new mac')
+    option, argument = parse.parse_args()
+    if not option.n:
+        parse.error('[-]Enter an interface, --help for help')
+    if not option.s:
+        parse.error('[-]Enter arguments, --help for help')
+    return option
+
+
+def mac_changer(n, s):
+    subprocess.call(['ifconfig', n, 'down'])
+    subprocess.call(['ifconfig', n, 'hw', 'ether', s])
+    subprocess.call(['ifconfig', n, 'up'])
+
+
+def get_current_mac(n):
+    ifconfig_result = subprocess.check_output(['ifconfig', n])
+    ifconfig_result = str(ifconfig_result)
+    regex = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w", ifconfig_result)
+    if regex:
+        return regex.group(0)
+    else:
+        print('No Mac address found')
+
+
+options = arguments()
+
+current_mac = get_current_mac(options.n)
+print('Current mac:' + str(current_mac))
+
+mac_changer(options.n, options.s)
+
+current_mac = get_current_mac(options.n)
+if current_mac == options.s:
+    print('[+]Changing MAC address to ' + current_mac)
+    print('[+]MAC address to changed to ' + current_mac)
+
+else:
+    print('[+]MAC address could not be changed')
+
+# subprocess.call('ifconfig ' + n + ' down ', shell=True)
+# subprocess.call('ifconfig ' + n + ' hw ether ' + s, shell=True)
+# subprocess.call('ifconfig ' + n + ' up', shell=True)
+
+
