@@ -45,7 +45,7 @@ if current_mac == options.s:
     print('[+]MAC address to changed to ' + current_mac)
 
 else:
-    print('[+]MAC address could not be changed')
+    print('[+]MAC address could not be changed, Hooray')
 
 # subprocess.call('ifconfig ' + n + ' down ', shell=True)
 # subprocess.call('ifconfig ' + n + ' hw ether ' + s, shell=True)
