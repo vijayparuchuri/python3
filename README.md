@@ -1,2 +1,2 @@
 # python3
-stuff.
+Terminal tool to change MAC address in Linux
